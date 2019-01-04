@@ -1,10 +1,35 @@
-<form action="<%= posts_path %>" method="POST">
+<form action="/posts" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="zkOjrjTG8Lxn0CF8Lt/kFIgWdYyY3NTMbwh+Q9kPX1NrYztgq0GZNCjLFavBXka1Y5QhNjDlhX+dzQoZMzUjOA==" />
   <label>Post title:</label><br>
   <input type="text" id="post_title" name="post[title]"><br>
 
   <label>Post description:</label><br>
   <textarea id="post_description" name="post[description]"></textarea><br>
 
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="authenticity_token" id="authenticity_token" value="7SuubeJGbqfm4rO+F5VTS6Wl1SNCTGOr/mrYZKOQLbtICzajfcEHL6n5h2n4FPHqTieBmep1MhgMr6w+SapR0A==" />
   <input type="submit" value="Submit Post">
+</form>
+The form_tag Rails helper is smart enough to know that we want to submit the form via the POST method, and it automatically renders the HTML that we were writing by hand before. The form_tag method also automatically generates the necessary authenticity token, so we can remove the now-redundant hidden_field_tag.
+
+Next, let's integrate some other form helpers to let Rails generate the input elements for us. For this form, we'll be using a text_field_tag and a text_area_tag and passing each the corresponding name attribute as a symbol. It's important to keep in mind that form helpers aren't magic –– they're simply Ruby methods that accept arguments, such as the name attribute and any additional parameters related to the form's elements. In addition to updating the form fields, we'll also replace the HTML tag for the submit button with a submit_tag.
+
+<%= form_tag posts_path do %>
+  <label>Post title:</label><br>
+  <%= text_field_tag :'post[title]' %><br>
+
+  <label>Post description:</label><br>
+  <%= text_area_tag :'post[description]' %><br>
+
+  <%= submit_tag "Submit Post" %>
+<% end %>
+Let's check out the raw HTML all these helper methods generate for us:
+
+<form action="/posts" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="vq9SMVNk0CjwgZmYomFRhwbo5dfu7tI/2FiR7jOtlVgbj8r/zOO5oL+arU9N4PMm7WqxbUbXg4wqneW02ZfpMw==" />
+  <label>Post title:</label><br>
+  <input type="text" name="post[title]" id="post_title" /><br>
+
+  <label>Post description:</label><br>
+  <textarea name="post[description]" id="post_description">
+</textarea><br>
+
+  <input type="submit" name="commit" value="Submit Post" />
 </form>
